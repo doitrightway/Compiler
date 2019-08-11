@@ -1,0 +1,103 @@
+#!/bin/bash
+if [ -z $1 ]; then
+	for i in $(ls A5-Test-Cases); do   
+		echo Testing file $i
+		echo -------------------
+		echo -------------------                                        
+    	# ./yoursclp -ast A5-Test-Cases/$i > myout 2>&1
+	    # mv A5-Test-Cases/$i.ast myout.ast
+	    # mv A5-Test-Cases/$i.spim myout.spim
+	    # ./sclp -ast A5-Test-Cases/$i > out 2>&1
+	    # mv A5-Test-Cases/$i.ast out.ast
+	    # mv A5-Test-Cases/$i.spim out.spim
+	    
+	    # ./yoursclp -eval A5-Test-Cases/$i > myout 2>&1
+	    # mv A5-Test-Cases/$i.eval myout.eval
+	    # ./sclp -eval A5-Test-Cases/$i > out 2>&1
+	    # mv A5-Test-Cases/$i.eval out.eval
+
+	    # ./yoursclp -symtab A5-Test-Cases/$i > myout 2>&1
+	    # mv A5-Test-Cases/$i.sym myout.sym
+	    # ./sclp -symtab A5-Test-Cases/$i > out 2>&1
+	    # mv A5-Test-Cases/$i.sym out.sym
+		
+		./yoursclp -icode A5-Test-Cases/$i > myout 2>&1
+	    mv A5-Test-Cases/$i.ic myout.ic
+	    ./sclp -icode A5-Test-Cases/$i > out 2>&1
+	    mv A5-Test-Cases/$i.ic out.ic
+
+	    ./yoursclp -compile A5-Test-Cases/$i > myout 2>&1
+	    mv A5-Test-Cases/$i.spim myout.spim
+	    ./sclp -compile A5-Test-Cases/$i > out 2>&1
+	    mv A5-Test-Cases/$i.spim out.spim
+
+	    if [ -s out.spim ]
+	    then
+	    	diff -Z myout.spim out.spim
+	    fi
+	    if [ -s out ]
+	    then
+	    	diff -Z myout out
+	    fi
+	    # if [ -s out.ast ]
+	    # then
+	    # 	diff -Z myout.ast out.ast
+	    # fi
+	    if [ -s out.ic ]
+	    then
+	    	diff -Z myout.ic out.ic
+	    fi
+	 #    if [ -s out.eval ]
+	 #    then
+	 #    	diff -Z myout.eval out.eval
+	 #    fi
+	 #    if [ -s out.sym ]
+	 #    then
+		#     diff -Z myout.sym out.sym
+		# fi
+		
+		rm A5-Test-Cases/$i.spim
+		rm A5-Test-Cases/$i.ic
+	done
+else
+	# ./yoursclp -ast $1 > myout 2>&1
+ #    mv $1.spim myout.spim
+ #    mv $1.ast myout.ast
+	# ./yoursclp -eval $1 > myout 2>&1
+ #    mv $1.eval myout.eval
+	# ./yoursclp -symtab $1 > myout 2>&1
+ #    mv $1.sym myout.sym
+	./yoursclp -icode $1 > myout 2>&1
+    mv $1.ic myout.ic
+    ./sclp -icode $1 > out 2>&1
+    mv $1.ic out.ic
+    echo "---------------"
+    diff -Z myout.ic out.ic
+
+    ./yoursclp -compile $1 > myout 2>&1
+    mv $1.spim myout.spim
+    ./sclp -compile $1 > out 2>&1
+    mv $1.spim out.spim
+ #    ./sclp -ast $1 > out 2>&1
+ #    mv $1.spim out.spim
+ #    mv $1.ast out.ast
+ #    echo "---------------"
+ #    diff -Z myout.ast out.ast
+ #    echo "---------------"
+ #    diff -Z myout.spim out.spim
+	# ./sclp -eval $1 > out 2>&1
+ #    mv $1.eval out.eval
+ #    echo "---------------"
+
+ #    diff -Z myout.eval out.eval
+	# ./sclp -symtab $1 > out 2>&1
+ #    mv $1.sym out.sym
+ #    echo "---------------"
+ #    diff -Z myout.sym out.sym
+	
+    echo "---------------"
+    diff -Z myout out
+    echo "---------------"
+    diff -Z myout.spim out.spim
+fi
+
